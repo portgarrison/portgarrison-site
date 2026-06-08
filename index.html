@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PortGarrison Systems — Device-Edge Resilience for Healthcare & OT</title>
+<meta name="description" content="PortGarrison builds the Operational Continuity Layer (OCL) — a hardware control appliance at the device network edge that keeps connected medical and operational devices secure and functional through authentication failures, network outages, and cyber incidents.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0f14'/%3E%3Cpath d='M7 8h7v3.2H10.2V18H7V8z' fill='%230166fe'/%3E%3Cpath d='M25 24h-7v-3.2H21.8V14H25v10z' fill='%230166fe'/%3E%3Crect x='14' y='13' width='5' height='5' fill='%2324f487'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#0b0f14; --panel:#11171f; --panel2:#0e141b; --line:#1f2a37;
+    --ink:#e8eef5; --mut:#9fb0c3; --dim:#6b7c8f;
+    --acc:#3d8bff; --acc-solid:#0166fe; --acc2:#24f487;
+    --maxw:1080px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  a{color:var(--acc);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  header{position:sticky;top:0;z-index:10;background:rgba(11,15,20,.88);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
+  .brand img{height:30px;display:block}
+  .nav nav a{color:var(--mut);margin-left:20px;font-size:14px}
+  .nav nav a:hover{color:var(--ink);text-decoration:none}
+  @media(max-width:760px){.nav nav{display:none}}
+
+  .hero{padding:96px 0 76px;border-bottom:1px solid var(--line);
+    background:radial-gradient(1100px 420px at 72% -12%,rgba(1,102,254,.16),transparent 60%)}
+  .eyebrow{color:var(--acc2);font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:18px}
+  h1{font-size:clamp(30px,5vw,52px);line-height:1.1;margin:0 0 20px;letter-spacing:-.02em}
+  .lede{font-size:clamp(17px,2.2vw,21px);color:var(--mut);max-width:780px;margin:0}
+  .cta{margin-top:36px;display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:12px 22px;border-radius:8px;font-weight:600;font-size:15px}
+  .btn.primary{background:var(--acc-solid);color:#fff}
+  .btn.primary:hover{filter:brightness(1.12);text-decoration:none}
+  .btn.ghost{border:1px solid var(--line);color:var(--ink)}
+  .btn.ghost:hover{border-color:var(--acc);text-decoration:none}
+
+  section{padding:74px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:clamp(22px,3vw,30px);margin:0 0 8px;letter-spacing:-.01em}
+  .sub{color:var(--acc2);font-size:13px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;margin-bottom:24px}
+  p{color:var(--mut)}
+  .lead-p{color:var(--ink);font-size:18px}
+  em{color:var(--ink);font-style:normal;font-weight:600}
+
+  .grid{display:grid;gap:18px}
+  .cols-2{grid-template-columns:1fr 1fr}
+  .cols-3{grid-template-columns:repeat(3,1fr)}
+  .cols-5{grid-template-columns:repeat(5,1fr)}
+  @media(max-width:900px){.cols-3,.cols-5{grid-template-columns:1fr 1fr}}
+  @media(max-width:620px){.cols-2,.cols-3,.cols-5{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px}
+  .card h3{margin:0 0 8px;font-size:16px;color:var(--ink)}
+  .card p{margin:0;font-size:14.5px}
+  .step .k{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--acc2);text-transform:uppercase}
+  .card .ic{width:30px;height:30px;border-radius:7px;background:rgba(1,102,254,.16);
+    display:flex;align-items:center;justify-content:center;margin-bottom:12px;color:var(--acc);font-weight:700;font-size:14px}
+
+  .stat-row{display:flex;gap:38px;flex-wrap:wrap;margin:22px 0 4px}
+  .stat .n{font-size:30px;font-weight:700;color:var(--ink);line-height:1.1}
+  .stat .n span{color:var(--acc2)}
+  .stat .l{font-size:13px;color:var(--dim);margin-top:4px;max-width:220px}
+
+  ul.clean{list-style:none;padding:0;margin:14px 0 0}
+  ul.clean li{padding:11px 0 11px 26px;position:relative;color:var(--mut);border-top:1px solid var(--line)}
+  ul.clean li:first-child{border-top:none}
+  ul.clean li::before{content:"";position:absolute;left:2px;top:19px;width:8px;height:8px;border-radius:2px;background:var(--acc2)}
+
+  .rel{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;display:inline-block;margin-bottom:10px}
+  .rel.add{color:var(--acc2);border:1px solid rgba(36,244,135,.4)}
+  .rel.adj{color:var(--acc);border:1px solid rgba(61,139,255,.4)}
+  .rel.comp{color:#c9a6ff;border:1px solid rgba(201,166,255,.4)}
+
+  .phase{display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-top:1px solid var(--line)}
+  .phase:first-child{border-top:none}
+  .phase .tag{flex:0 0 auto;font-size:12px;font-weight:700;letter-spacing:.05em;color:var(--acc);
+    border:1px solid var(--line);border-radius:999px;padding:5px 12px;margin-top:2px;white-space:nowrap}
+  .phase h3{margin:0 0 4px;font-size:16px;color:var(--ink)}
+  .phase p{margin:0;font-size:14.5px}
+
+  .contact{background:var(--panel2)}
+  .contact .box{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:34px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+  .contact a.mail{font-size:19px;font-weight:600;color:var(--ink);word-break:break-all}
+
+  footer{padding:34px 0;color:var(--dim);font-size:13px}
+  .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .src{color:var(--dim);font-size:12px;margin-top:14px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand"><img src="data:image/png;base64,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" alt="PortGarrison Systems"></div>
+    <nav>
+      <a href="#problem">Problem</a>
+      <a href="#solution">Solution</a>
+      <a href="#stack">Stack</a>
+      <a href="#why">Why now</a>
+      <a href="#dualuse">Dual-use</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Device-Edge Resilience for Healthcare &amp; OT Environments</div>
+    <h1>Keeping connected devices running when the infrastructure around them fails.</h1>
+    <p class="lede">PortGarrison builds the <em>Operational Continuity Layer (OCL)</em> — a hardware control appliance at the device network edge that keeps connected medical and operational devices secure and functional through authentication failures, network outages, and cyber incidents. No agent on the device. No firmware modification. Enforcement that continues when the controllers don't.</p>
+    <div class="cta">
+      <a class="btn primary" href="#solution">How it works</a>
+      <a class="btn ghost" href="#contact">Get in touch</a>
+    </div>
+  </div>
+</div>
+
+<section id="problem">
+  <div class="wrap">
+    <div class="sub">The problem</div>
+    <h2>Smart-OT connectivity loss is largely invisible — and the failure doesn't announce itself.</h2>
+    <p class="lead-p" style="margin-top:18px">Hospitals now run at smart-OT-enabled staffing ratios. When connectivity fails, the labor model fails with it: monitors go dark, early-warning analytics stop, devices revert to manual operation. Clinical staff can see that something is wrong — but not <em>what</em> failed or <em>where</em>. Every alarm becomes an investigation.</p>
+    <div class="grid cols-2" style="margin-top:30px">
+      <div class="card"><h3>What incumbents do</h3><p>IoMT-visibility platforms discover and alert at the network layer. NAC and microsegmentation can enforce policy — but at the network or segment layer, only when enforcement is actually switched on, and only while the central management plane stays reachable.</p></div>
+      <div class="card"><h3>What's missing</h3><p><em>Nothing protects OT device connectivity when the enterprise network fails.</em> Three things no incumbent delivers together: inline enforcement at the device edge for endpoints that can't run agents; enforcement that keeps running when central systems are unreachable; and graceful degradation of connectivity when the infrastructure itself fails.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="solution">
+  <div class="wrap">
+    <div class="sub">The solution</div>
+    <h2>The Operational Continuity Layer — a device-edge control appliance.</h2>
+    <p class="lead-p" style="margin-top:18px">Deployed inline at the network boundary in front of a single high-criticality device or a small cluster of devices — typically four to eight — to fit clinical workflows. It runs a continuous control loop from locally cached policy, independent of upstream controllers, so each device stays reachable and individually governed through disruption, and every event is recorded as active compliance evidence.</p>
+    <div class="grid cols-5" style="margin-top:30px">
+      <div class="card step"><div class="ic">1</div><div class="k">Sense</div><h3>Device-Boundary Observability</h3><p>Device-perspective telemetry with six-cause failure classification.</p></div>
+      <div class="card step"><div class="ic">2</div><div class="k">Decide</div><h3>Per-Device Policy Engine</h3><p>Local cached policy; operator-defined behavior governs the controller-unavailable interval.</p></div>
+      <div class="card step"><div class="ic">3</div><div class="k">Enforce</div><h3>Hardware Inline Enforcement</h3><p>The appliance is the inline network endpoint for each protected device — enforcement continues through auth, certificate, and cloud failures.</p></div>
+      <div class="card step"><div class="ic">4</div><div class="k">Degrade</div><h3>Multi-Path Transport</h3><p>Per-device arbitration across LAN, WiFi, sub-GHz mesh, and cellular.</p></div>
+      <div class="card step"><div class="ic">5</div><div class="k">Report</div><h3>Continuity Evidence Chain</h3><p>Safe-harbor-aligned audit trail and active enforcement record — not passive documentation.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="sub">Where PortGarrison sits</div>
+    <h2>A layer none of the incumbents occupy.</h2>
+    <p style="margin-top:18px">The security stack tells hospitals what is wrong. What it doesn't do is keep devices enforced and operational through disruption — when the management plane, identity, or upstream network is unavailable. PortGarrison is complementary to the existing stack, not a replacement for it.</p>
+    <div class="grid cols-3" style="margin-top:28px">
+      <div class="card"><span class="rel add">Additive</span><h3>Observability &amp; Hygiene</h3><p>Claroty, Armis, Cynerio, Ordr, Nozomi. Discovery and vulnerability mapping. PG extends visibility to the physical device boundary.</p></div>
+      <div class="card"><span class="rel adj">Adjacent</span><h3>Identity &amp; Segmentation</h3><p>Cisco ISE, Aruba ClearPass, Forescout, Palo Alto, Elisity. NAC and microsegmentation. PG keeps enforcing per-device when their management plane is unavailable.</p></div>
+      <div class="card"><span class="rel comp">Complementary</span><h3>Site Resilience</h3><p>SD-WAN, Cradlepoint, cellular and satellite failover. PG adds per-device granularity below the site edge — and works through internal-infrastructure failure.</p></div>
+    </div>
+    <p class="src">The structural gap: no vendor in any category delivers per-device inline enforcement, controller-unavailable persistence, and multi-path transport arbitration at once.</p>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <div class="sub">Why now</div>
+    <h2>Why the window is open now.</h2>
+    <p style="margin-top:14px;max-width:780px">The primary drivers are clinical and financial — patient-safety exposure and the cost of operational derating when connectivity drops — with rising regulatory pressure compounding both.</p>
+    <div class="grid cols-3" style="margin-top:26px">
+      <div class="card"><div class="ic">01</div><h3>Patient-safety exposure</h3><p>Lost connectivity is a clinical event, not an IT one. Infusion pumps revert to manual programming, removing the dose-error-reduction safeguard that smart pumps were adopted to provide. In time-critical stroke and trauma cases, imaging studies that can't reach a radiologist can force diversion. Centralized tele-ICU and tele-stroke coverage can drop out from under the bedside team.</p></div>
+      <div class="card"><div class="ic">02</div><h3>Financial / operational derating</h3><p>Hospitals have rebuilt staffing around smart-OT. When it degrades, the labor substitution evaporates into travel-nurse premium, lost throughput, and ER diversions — a large, largely uninsured, and structurally growing exposure.</p></div>
+      <div class="card"><div class="ic">03</div><h3>Deepening device dependency</h3><p>Auto-programming, central monitoring bunkers, and AI-assisted imaging have made hospitals more dependent on device connectivity than they were five years ago — so each outage now cuts deeper, and the trend runs one direction.</p></div>
+      <div class="card"><div class="ic">04</div><h3>A compensating control, not a patch</h3><p>FDA §524B raises the cybersecurity baseline for newly cleared devices and signals where provider-directed regulation is heading. The vast legacy fleet can't be patched to that bar — these devices need a compensating control that protects them without modification, which is exactly PortGarrison's role.</p></div>
+      <div class="card"><div class="ic">05</div><h3>Reporting &amp; HIPAA reform</h3><p>CIRCIA's healthcare incident-reporting rules land in 2026 and HIPAA Security Rule modernization is underway — moving device security from best practice into documented obligation with financial consequence.</p></div>
+      <div class="card"><div class="ic">06</div><h3>Insurer, board &amp; Zero-Trust pressure</h3><p>Cyber-insurers and boards now demand device-level security evidence, and Zero-Trust (NIST SP 800-207) procurement expectations require per-device enforcement controller-based incumbents can't deliver — yet roughly half of health systems (KLAS / Censinet) can't even confirm device posture.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="dualuse">
+  <div class="wrap">
+    <div class="sub">Dual-use</div>
+    <h2>Dual-use by architecture, not by pivot.</h2>
+    <p class="lead-p" style="margin-top:18px">Operating through loss of connectivity is a core design property of the OCL — it runs from locally cached policy, independent of upstream controllers, with deterministic fallback and multi-path transport. The architecture has been designed with an eye toward the continuity-critical environments outside the hospital that share that same constraint, giving it dual-use potential.</p>
+    <div class="grid cols-3" style="margin-top:28px">
+      <div class="card"><h3>Built for disconnected operation</h3><p>Maintaining device function and policy through loss of upstream connectivity is designed in from the start — not a feature added for a second market.</p></div>
+      <div class="card"><h3>Defense &amp; critical-infrastructure OT</h3><p>The same disconnected-operation property is what defense-industrial-base manufacturing OT, federal health systems, and other fragmented-infrastructure settings require. PortGarrison treats these as a potential expansion path, not a current deployment.</p></div>
+      <div class="card"><h3>Standards alignment</h3><p>Federal guidance increasingly calls for preparedness to operate through disconnected and degraded conditions — the exact problem the OCL is built to address.</p></div>
+    </div>
+    <p class="src">Export posture is expected to be EAR dual-use rather than ITAR, subject to formal classification.</p>
+  </div>
+</section>
+
+<section id="stage">
+  <div class="wrap">
+    <div class="sub">Where we are</div>
+    <h2>Pre-seed. Pre-prototype. Architecture and IP substantially complete.</h2>
+    <p class="lead-p" style="margin-top:18px;max-width:780px">Years of architecture and IP work are already behind us — the kind of groundwork that de-risks the build ahead.</p>
+    <div class="grid cols-3" style="margin-top:24px">
+      <div class="card"><h3>A complete reference architecture</h3><p>The full system has been designed end-to-end, with every significant design decision documented and traceable — not a concept sketch.</p></div>
+      <div class="card"><h3>A growing patent portfolio</h3><p>A substantial body of invention disclosures across the core enforcement, resilience, and device-observability methods, with the first filing underway with patent counsel.</p></div>
+      <div class="card"><h3>Validated with senior buyers</h3><p>Reviewed with current and former CISOs and clinical-informatics leaders at large U.S. health systems; design-partner conversations forming.</p></div>
+    </div>
+    <div style="margin-top:24px">
+      <div class="phase"><span class="tag">PHASE I · now → 18 mo</span><div><h3>OCL Core Enforcement</h3><p>Prototype fabrication, design-partner engagement, 1–2 clinical pilot sites on the imaging beachhead with a cellular-failover demonstration, and first patent filing.</p></div></div>
+      <div class="phase"><span class="tag">PHASE II · 18 → 36 mo</span><div><h3>Scale + Chan
