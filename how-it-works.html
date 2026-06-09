@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>How It Works — PortGarrison Systems</title>
-<meta name="description" content="An interactive walkthrough of the PortGarrison Operational Continuity Layer (OCL): how a connected medical device stays functional through a network failure that would otherwise take it offline.">
+<meta name="description" content="Interactive walkthrough of the PortGarrison Operational Continuity Layer (OCL): how a connected imaging device keeps moving studies to the radiologist through three different network failure points.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0f14'/%3E%3Cpath d='M7 8h7v3.2H10.2V18H7V8z' fill='%230166fe'/%3E%3Cpath d='M25 24h-7v-3.2H21.8V14H25v10z' fill='%230166fe'/%3E%3Crect x='14' y='13' width='5' height='5' fill='%2324f487'/%3E%3C/svg%3E">
 <style>
   :root{
@@ -12,7 +12,7 @@
     --ink:#e8eef5; --mut:#9fb0c3; --dim:#6b7c8f;
     --acc:#3d8bff; --acc-solid:#0166fe; --acc2:#24f487;
     --bad:#ff5d5d; --warn:#ffb454;
-    --maxw:1000px;
+    --maxw:1020px;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -28,78 +28,73 @@
   .brand img{height:28px;display:block}
   .nav a.back{color:var(--mut);font-size:14px}
 
-  .hero{padding:64px 0 28px}
+  .hero{padding:60px 0 24px}
   .eyebrow{color:var(--acc2);font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:16px}
-  h1{font-size:clamp(26px,4vw,40px);line-height:1.12;margin:0 0 16px;letter-spacing:-.02em}
-  .lede{font-size:clamp(16px,2vw,19px);color:var(--mut);max-width:760px;margin:0}
+  h1{font-size:clamp(26px,4vw,38px);line-height:1.12;margin:0 0 16px;letter-spacing:-.02em}
+  .lede{font-size:clamp(16px,2vw,18px);color:var(--mut);max-width:780px;margin:0}
   .disclaimer{margin-top:20px;display:inline-block;font-size:12.5px;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:6px 14px}
+  em{color:var(--ink);font-style:normal;font-weight:600}
 
-  .scenario{color:var(--mut);font-size:15px;margin:34px 0 6px;padding:14px 16px;background:var(--panel2);border:1px solid var(--line);border-radius:10px}
+  .scenario{color:var(--mut);font-size:15px;margin:30px 0 6px;padding:14px 16px;background:var(--panel2);border:1px solid var(--line);border-radius:10px}
   .scenario b{color:var(--ink)}
 
-  .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:24px 0 8px}
-  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:8px;font-weight:600;font-size:15px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink);font-family:inherit}
-  .btn.fail{background:var(--warn);color:#2a1800;border-color:var(--warn)}
-  .btn.fail:hover{filter:brightness(1.06)}
+  .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:22px 0 6px}
+  .controls .lbl{color:var(--dim);font-size:13px;width:100%;margin-bottom:2px}
+  .btn{display:inline-block;padding:11px 16px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-family:inherit;line-height:1.2}
+  .btn.brk{background:rgba(255,180,84,.16);border-color:var(--warn);color:#ffd9a8}
+  .btn.brk:hover{background:rgba(255,180,84,.28)}
   .btn.ghost:hover{border-color:var(--acc)}
-  .hint{color:var(--dim);font-size:13px}
 
-  .lane{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 20px 18px;margin-top:18px}
-  .lane .cap{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px}
-  .lane.without .cap{color:var(--bad)}
-  .lane.with .cap{color:var(--acc2)}
-  .dot{width:9px;height:9px;border-radius:50%}
-  .without .dot{background:var(--bad)}
-  .with .dot{background:var(--acc2)}
+  .stage{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 14px 6px;margin-top:14px}
   .scene{width:100%;height:auto;display:block}
 
-  .link{fill:none;stroke:var(--line);stroke-width:3;stroke-linecap:round}
+  .seg,.arc{fill:none;stroke:var(--line);stroke-width:3;stroke-linecap:round}
   @keyframes dash{to{stroke-dashoffset:-28}}
-  /* normal-state flows */
-  #sim.normal #segA1,#sim.normal #segA2,#sim.normal #segBp,#sim #segBm{
-    stroke:var(--acc2);stroke-dasharray:6 8;animation:dash .9s linear infinite}
-  /* failed state */
-  #sim.failed #segA1{stroke:var(--warn);animation:none;stroke-dasharray:6 8}
-  #sim.failed #segA2{stroke:var(--bad);animation:none;stroke-dasharray:6 8}
-  #sim.failed #segBp{stroke:var(--bad);animation:none;stroke-dasharray:6 8}
-  #sim.failed #segBalt{stroke:var(--acc2);stroke-dasharray:6 8;animation:dash .9s linear infinite}
+  .seg{stroke:var(--acc2);stroke-dasharray:6 8;animation:dash .9s linear infinite}
+  #sim.b1 #segOP{stroke:var(--bad);animation:none}
+  #sim.b2 #segPR{stroke:var(--bad);animation:none}
+  #sim.b3 #segPP{stroke:var(--bad);animation:none}
+  .arc{opacity:0}
+  #sim.b1 #meshArc,#sim.b2 #cellArc2,#sim.b3 #cellArc3{opacity:1;stroke:var(--acc2);stroke-dasharray:6 8;animation:dash .9s linear infinite}
 
-  .alt{opacity:0;transition:.3s}
-  #sim.failed #segBalt,#sim.failed #altLabel{opacity:1}
-  #altLabel{opacity:0;transition:.3s;fill:var(--acc2);font-size:11px;font-weight:600;text-anchor:middle}
+  .arclbl{opacity:0;fill:var(--acc2);font-size:11px;font-weight:600;text-anchor:middle;transition:.2s}
+  #sim.b1 #meshLbl,#sim.b2 #cellLbl2,#sim.b3 #cellLbl3{opacity:1}
+  .seglbl{fill:var(--dim);font-size:10.5px;font-weight:500;text-anchor:middle}
 
   .brk{opacity:0;transition:.2s}
   .brk line{stroke:var(--bad);stroke-width:3;stroke-linecap:round}
-  #sim.failed #breakA,#sim.failed #breakB{opacity:1}
+  #sim.b1 #brk1,#sim.b2 #brk2,#sim.b3 #brk3{opacity:1}
 
   .node rect{fill:var(--panel2);stroke:var(--line);stroke-width:1.5;transition:.3s}
-  .node text{fill:var(--ink);font-size:13px;font-weight:600;text-anchor:middle}
-  #oclB rect{fill:rgba(1,102,254,.16);stroke:var(--acc)}
-  #sim.failed #oclB rect{stroke:var(--acc2);filter:drop-shadow(0 0 7px rgba(36,244,135,.65))}
-  #oclB text{fill:var(--acc2)}
-  #sim.failed #radA{opacity:.4}
+  .node text{fill:var(--ink);font-size:12.5px;font-weight:600;text-anchor:middle}
+  #oclrect{fill:rgba(1,102,254,.16);stroke:var(--acc)}
+  #ocltext{fill:var(--acc2)}
+  #sim.b1 #oclrect,#sim.b2 #oclrect,#sim.b3 #oclrect{stroke:var(--acc2);filter:drop-shadow(0 0 7px rgba(36,244,135,.6))}
+  #sim.b2 #remoteG rect{opacity:.45}
+  #sim.b3 #pracG rect{opacity:.45}
 
-  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 2px}
   .chip{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:6px 11px;border-radius:999px;border:1px solid var(--line);color:var(--dim);transition:.25s}
   .chip.on{color:#04130c;background:var(--acc2);border-color:var(--acc2)}
 
-  .status{margin-top:14px;font-size:14.5px;min-height:42px}
-  .status .ok{color:var(--mut)}
-  .status .bad{color:#ffb4b4}
-  .status .good{color:var(--acc2)}
-  .s-fail{display:none}
-  #sim.failed .s-norm{display:none}
-  #sim.failed .s-fail{display:inline}
+  .status{margin-top:16px}
+  .sblock{display:none}
+  #sim.normal #st0,#sim.b1 #st1,#sim.b2 #st2,#sim.b3 #st3{display:block}
+  .sblock .row{display:flex;gap:10px;padding:7px 0;font-size:14.5px;align-items:baseline}
+  .sblock .tag{flex:0 0 96px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding-top:2px}
+  .tag.no{color:#ffb4b4}
+  .tag.yes{color:var(--acc2)}
+  .sblock .neutral{color:var(--mut)}
 
-  .explain{padding:60px 0 20px}
-  .explain h2{font-size:24px;margin:0 0 16px;letter-spacing:-.01em}
-  .loop{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:20px}
+  .explain{padding:54px 0 20px}
+  .explain h2{font-size:24px;margin:0 0 14px;letter-spacing:-.01em}
+  .loop{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:18px}
   @media(max-width:760px){.loop{grid-template-columns:1fr 1fr}}
   .lcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
   .lcard .k{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--acc2);text-transform:uppercase}
   .lcard h3{margin:6px 0 6px;font-size:15px}
   .lcard p{margin:0;color:var(--mut);font-size:13.5px}
-  .takeaway{margin-top:34px;font-size:18px;color:var(--ink);border-left:3px solid var(--acc2);padding:6px 0 6px 18px}
+  .takeaway{margin-top:32px;font-size:18px;color:var(--ink);border-left:3px solid var(--acc2);padding:6px 0 6px 18px}
 
   footer{padding:40px 0;color:var(--dim);font-size:13px;border-top:1px solid var(--line);margin-top:40px}
   .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -117,78 +112,99 @@
 <div class="hero">
   <div class="wrap">
     <div class="eyebrow">Interactive demo</div>
-    <h1>How the OCL keeps care running through a failure.</h1>
-    <p class="lede">The same network failure, side by side: a connected imaging device <em>without</em> PortGarrison versus one protected by the Operational Continuity Layer. Press the button and watch what each does when the path to the radiologist drops.</p>
+    <h1>Three ways the imaging chain breaks — and how the OCL routes around each.</h1>
+    <p class="lede">A CT/MRI study has to travel from the modality, through the hospital PACS, and out to the radiologist — either by remote access into the hospital, or by replication to the reading practice's PACS. Connectivity can break at three different points. Pick one and watch what happens <em>without</em> PortGarrison versus <em>with</em> the OCL.</p>
     <div class="disclaimer">Illustrative simulation of the architecture — not a live system or real device telemetry.</div>
   </div>
 </div>
 
 <div class="wrap">
-  <div class="scenario"><b>Scenario:</b> a CT / MRI modality loses its network path to PACS and the remote radiologist — the kind of break that, in a stroke or trauma case, delays reads and forces ER diversion.</div>
+  <div class="scenario"><b>The path:</b> CT / MRI &rarr; hospital PACS &rarr; <b>either</b> a remote radiologist logging in over the hospital's ISP/VPN (DMZ proxy) <b>or</b> replication over VPN to the rad-practice's own PACS. The OCL sits inline at the modality with independent sub-GHz mesh and per-device cellular paths.</div>
 
   <div class="controls">
-    <button class="btn fail" onclick="failSim()">⚡ Simulate network failure</button>
-    <button class="btn ghost" onclick="restoreSim()">↺ Restore</button>
-    <span class="hint">Triggers both lanes at once so you can compare.</span>
+    <span class="lbl">Simulate a break at:</span>
+    <button type="button" class="btn brk" onclick="setBreak(1)">1) Modality to PACS (local network)</button>
+    <button type="button" class="btn brk" onclick="setBreak(2)">2) PACS to remote radiologist (ISP / VPN)</button>
+    <button type="button" class="btn brk" onclick="setBreak(3)">3) PACS to practice PACS (replication)</button>
+    <button type="button" class="btn ghost" onclick="setBreak(0)">Restore</button>
   </div>
 
   <div id="sim" class="normal">
+    <div class="stage">
+      <svg class="scene" viewBox="0 -30 760 380" role="img" aria-label="Imaging connectivity topology with PortGarrison OCL">
+        <!-- spine + branch segments -->
+        <path id="segMO" class="seg" d="M124 80 H140"/>
+        <path id="segOP" class="seg" d="M204 80 H290"/>
+        <path id="segPR" class="seg" d="M418 80 C 500 60, 545 44, 590 44"/>
+        <path id="segPP" class="seg" d="M418 80 C 500 100, 545 174, 590 174"/>
 
-    <div class="lane without">
-      <div class="cap"><span class="dot"></span> Without PortGarrison</div>
-      <svg class="scene" viewBox="0 0 640 150" role="img" aria-label="Imaging device without PortGarrison during a network failure">
-        <path id="segA1" class="link" d="M140 75 H270"/>
-        <path id="segA2" class="link" d="M400 75 H500"/>
-        <g id="breakA" class="brk"><line x1="442" y1="62" x2="458" y2="88"/><line x1="458" y1="62" x2="442" y2="88"/></g>
-        <g class="node" id="modA"><rect x="20" y="50" width="120" height="50" rx="8"/><text x="80" y="79">CT / MRI</text></g>
-        <g class="node" id="netA"><rect x="270" y="48" width="130" height="54" rx="8"/><text x="335" y="72">Hospital<tspan x="335" dy="16">network</tspan></text></g>
-        <g class="node" id="radA"><rect x="500" y="50" width="120" height="50" rx="8"/><text x="560" y="72">PACS /<tspan x="560" dy="16">Radiologist</tspan></text></g>
+        <!-- OCL alternate paths -->
+        <path id="meshArc" class="arc" d="M171 106 C 235 178, 300 178, 354 104"/>
+        <path id="cellArc2" class="arc" d="M171 54 C 360 -22, 540 -22, 648 20"/>
+        <path id="cellArc3" class="arc" d="M171 106 C 320 300, 520 300, 632 198"/>
+
+        <!-- break markers -->
+        <g id="brk1" class="brk"><line x1="239" y1="68" x2="255" y2="92"/><line x1="255" y1="68" x2="239" y2="92"/></g>
+        <g id="brk2" class="brk"><line x1="497" y1="40" x2="513" y2="64"/><line x1="513" y1="40" x2="497" y2="64"/></g>
+        <g id="brk3" class="brk"><line x1="497" y1="140" x2="513" y2="164"/><line x1="513" y1="140" x2="497" y2="164"/></g>
+
+        <!-- segment labels -->
+        <text class="seglbl" x="247" y="62">local network</text>
+        <text class="seglbl" x="512" y="92">ISP / VPN</text>
+        <text class="seglbl" x="470" y="150">replication VPN</text>
+
+        <!-- arc labels -->
+        <text id="meshLbl" class="arclbl" x="262" y="176">sub-GHz mesh</text>
+        <text id="cellLbl2" class="arclbl" x="410" y="-8">per-device cellular (out-of-band)</text>
+        <text id="cellLbl3" class="arclbl" x="372" y="302">per-device cellular (out-of-band)</text>
+
+        <!-- nodes -->
+        <g class="node" id="modG"><rect x="16" y="56" width="108" height="48" rx="8"/><text x="70" y="84">CT / MRI</text></g>
+        <g class="node" id="oclG"><rect id="oclrect" x="140" y="54" width="62" height="52" rx="8"/><text id="ocltext" x="171" y="84">OCL</text></g>
+        <g class="node" id="pacsG"><rect x="290" y="56" width="128" height="48" rx="8"/><text x="354" y="75">Hospital<tspan x="354" dy="16">PACS</tspan></text></g>
+        <g class="node" id="remoteG"><rect x="590" y="20" width="150" height="48" rx="8"/><text x="665" y="39">Remote<tspan x="665" dy="16">radiologist</tspan></text></g>
+        <g class="node" id="pracG"><rect x="590" y="150" width="150" height="48" rx="8"/><text x="665" y="169">Rad-practice<tspan x="665" dy="16">PACS</tspan></text></g>
       </svg>
-      <div class="status">
-        <span class="s-norm ok">Normal operation — images flow from the modality to the radiologist.</span>
-        <span class="s-fail bad">Network path down. Images queue at the modality and the radiologist can't read. In time-critical stroke or trauma cases, this can force ER diversion.</span>
-      </div>
     </div>
 
-    <div class="lane with">
-      <div class="cap"><span class="dot"></span> With PortGarrison OCL</div>
-      <svg class="scene" viewBox="0 0 640 175" role="img" aria-label="Imaging device with PortGarrison OCL during a network failure">
-        <path id="segBm" class="link" d="M130 75 H148"/>
-        <path id="segBp" class="link" d="M208 75 H500"/>
-        <path id="segBalt" class="link alt" d="M178 102 C 300 168, 440 168, 520 100"/>
-        <text id="altLabel" x="349" y="158">cellular / mesh failover</text>
-        <g id="breakB" class="brk"><line x1="442" y1="62" x2="458" y2="88"/><line x1="458" y1="62" x2="442" y2="88"/></g>
-        <g class="node" id="modB"><rect x="20" y="50" width="110" height="50" rx="8"/><text x="75" y="79">CT / MRI</text></g>
-        <g class="node" id="oclB"><rect x="148" y="48" width="60" height="54" rx="8"/><text x="178" y="79">OCL</text></g>
-        <g class="node" id="netB"><rect x="270" y="48" width="130" height="54" rx="8"/><text x="335" y="72">Hospital<tspan x="335" dy="16">network</tspan></text></g>
-        <g class="node" id="radB"><rect x="500" y="50" width="120" height="50" rx="8"/><text x="560" y="72">PACS /<tspan x="560" dy="16">Radiologist</tspan></text></g>
-      </svg>
-      <div class="chips" id="chips">
-        <span class="chip">Sense</span>
-        <span class="chip">Decide</span>
-        <span class="chip">Enforce</span>
-        <span class="chip">Degrade</span>
-        <span class="chip">Report</span>
-      </div>
-      <div class="status">
-        <span class="s-norm ok">Normal operation — images flow through the OCL to the radiologist.</span>
-        <span class="s-fail good">Failure detected at the OCL. Enforcement continues from cached policy; traffic fails over to an alternate path. Reads continue, and the event is logged.</span>
-      </div>
+    <div class="chips" id="chips">
+      <span class="chip">Sense</span>
+      <span class="chip">Decide</span>
+      <span class="chip">Enforce</span>
+      <span class="chip">Degrade</span>
+      <span class="chip">Report</span>
     </div>
 
+    <div class="status">
+      <div class="sblock" id="st0">
+        <p class="neutral" style="margin:6px 0">Normal operation — studies flow from the modality through the hospital PACS and on to the radiologist. Pick a break above to see what happens.</p>
+      </div>
+      <div class="sblock" id="st1">
+        <div class="row"><span class="tag no">Without</span><span>The study can't leave the modality — it queues locally. The radiologist has nothing to read, and the team can't tell whether it's the device, the cable, or the network.</span></div>
+        <div class="row"><span class="tag yes">With OCL</span><span>The OCL reroutes the modality over its <em>sub-GHz mesh</em> path to an alternate route into the PACS — studies keep moving and reads continue. Fault localized: local network / last meter.</span></div>
+      </div>
+      <div class="sblock" id="st2">
+        <div class="row"><span class="tag no">Without</span><span>The hospital's remote-access path (ISP, VPN concentrator, or DMZ proxy) is down — the remote radiologist can't reach the PACS at all.</span></div>
+        <div class="row"><span class="tag yes">With OCL</span><span>The OCL pushes priority studies out over <em>per-device cellular</em> — an egress path independent of the hospital's ISP and VPN — so the radiologist still receives them. Fault localized: hospital infrastructure, not the modality.</span></div>
+      </div>
+      <div class="sblock" id="st3">
+        <div class="row"><span class="tag no">Without</span><span>The replication VPN between the hospital and the rad-practice PACS is down — the study never reaches the practice where the radiologist reads.</span></div>
+        <div class="row"><span class="tag yes">With OCL</span><span>The OCL carries the study out over <em>per-device cellular</em>, bypassing the broken inter-site link, to reach the practice PACS. Fault localized: inter-site replication link.</span></div>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="explain">
   <div class="wrap">
     <h2>What just happened</h2>
-    <p style="color:var(--mut);max-width:760px;margin:0">When the path failed, the unprotected device had no fallback — its data simply stopped moving. The OCL appliance runs a continuous control loop at the device edge, so it detected the break, kept enforcing from locally cached policy, and rerouted the device's traffic onto an alternate path — all without touching or reconfiguring the device itself.</p>
+    <p style="color:var(--mut);max-width:780px;margin:0">In every case the unprotected modality had no fallback — its data stopped at the break, and no one could immediately tell <em>where</em> it broke. The OCL runs a continuous control loop at the device edge: it detects the failure, classifies where it is, keeps enforcing from cached policy, and arbitrates across transport paths — <em>mesh</em> for a local break, <em>cellular</em> for an upstream one — without touching or reconfiguring the device.</p>
     <div class="loop">
       <div class="lcard"><div class="k">Sense</div><h3>Detect</h3><p>Device-perspective telemetry classifies the failure at the boundary.</p></div>
-      <div class="lcard"><div class="k">Decide</div><h3>Apply policy</h3><p>Local cached policy governs behavior while controllers are unreachable.</p></div>
+      <div class="lcard"><div class="k">Decide</div><h3>Localize</h3><p>Six-cause classification pins down which link failed — device, last meter, infrastructure, or inter-site.</p></div>
       <div class="lcard"><div class="k">Enforce</div><h3>Stay inline</h3><p>The appliance keeps enforcing as the device's network endpoint.</p></div>
-      <div class="lcard"><div class="k">Degrade</div><h3>Fail over</h3><p>Traffic shifts to an alternate transport path instead of going dark.</p></div>
-      <div class="lcard"><div class="k">Report</div><h3>Log it</h3><p>The failover is recorded as active compliance evidence.</p></div>
+      <div class="lcard"><div class="k">Degrade</div><h3>Reroute</h3><p>Mesh for a local break; per-device cellular, out-of-band, for an upstream one.</p></div>
+      <div class="lcard"><div class="k">Report</div><h3>Log it</h3><p>The failover and its root cause are recorded as active compliance evidence.</p></div>
     </div>
     <p class="takeaway">Device-edge resilience isn't about preventing failures — it's about maintaining care delivery through them, with the evidence to prove it.</p>
   </div>
@@ -206,16 +222,13 @@
   var chips = Array.prototype.slice.call(document.querySelectorAll('.chip'));
   var timers = [];
   function clearTimers(){ timers.forEach(function(t){clearTimeout(t);}); timers = []; }
-  function failSim(){
+  function setBreak(n){
     clearTimers();
-    sim.className = 'failed';
+    sim.className = n ? ('b' + n) : 'normal';
     chips.forEach(function(c){ c.classList.remove('on'); });
-    chips.forEach(function(c,i){ timers.push(setTimeout(function(){ c.classList.add('on'); }, 250 + i*280)); });
-  }
-  function restoreSim(){
-    clearTimers();
-    sim.className = 'normal';
-    chips.forEach(function(c){ c.classList.remove('on'); });
+    if(n){
+      chips.forEach(function(c,i){ timers.push(setTimeout(function(){ c.classList.add('on'); }, 250 + i*260)); });
+    }
   }
 </script>
 
