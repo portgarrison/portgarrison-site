@@ -41,8 +41,8 @@
   .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:22px 0 6px}
   .controls .lbl{color:var(--dim);font-size:13px;width:100%;margin-bottom:2px}
   .btn{display:inline-block;padding:11px 16px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-family:inherit;line-height:1.2}
-  .btn.brk{background:rgba(255,180,84,.16);border-color:var(--warn);color:#ffd9a8}
-  .btn.brk:hover{background:rgba(255,180,84,.28)}
+  .btn.bk{background:rgba(255,180,84,.16);border-color:var(--warn);color:#ffd9a8}
+  .btn.bk:hover{background:rgba(255,180,84,.28)}
   .btn.ghost:hover{border-color:var(--acc)}
 
   .stage{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 14px 6px;margin-top:14px}
@@ -123,9 +123,9 @@
 
   <div class="controls">
     <span class="lbl">Simulate a break at:</span>
-    <button type="button" class="btn brk" onclick="setBreak(1)">1) Modality to PACS (local network)</button>
-    <button type="button" class="btn brk" onclick="setBreak(2)">2) PACS to remote radiologist (ISP / VPN)</button>
-    <button type="button" class="btn brk" onclick="setBreak(3)">3) PACS to practice PACS (replication)</button>
+    <button type="button" class="btn bk" onclick="setBreak(1)">1) Modality to PACS (local network)</button>
+    <button type="button" class="btn bk" onclick="setBreak(2)">2) PACS to remote radiologist (ISP / VPN)</button>
+    <button type="button" class="btn bk" onclick="setBreak(3)">3) PACS to practice PACS (replication)</button>
     <button type="button" class="btn ghost" onclick="setBreak(0)">Restore</button>
   </div>
 
